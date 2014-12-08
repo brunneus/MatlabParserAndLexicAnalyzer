@@ -1,0 +1,32 @@
+﻿P  -> B $
+
+B  -> if B5 B B1 B2 end B | while B5 do B end B | for id = B5 : E1 B end B | switch B4 case B4 B B3 end B | id B6 B | E1 B7 B | ε
+B1 -> elseif B5 B B1 | ε
+B2 -> else B | ε
+B3 -> case B4 B B3 | otherwise B | ε
+B4 -> string | B5
+B5 -> id F | E1
+B6 -> = B4 B7 | F B7
+B7 -> ; | ε
+
+F  -> (F1
+F1 -> ) | F2)
+F2 -> B4 F3
+F3 -> ,F2 | ε
+
+E1	-> E2E1'
+E1' -> ∨ E2 E1' | ε
+E2  -> E3 E2'
+E2' -> & E3 E2' | ε
+E3  -> E4E3'
+E3' -> ||E4E3' | &&E4E3' | ε
+E4  -> E5E4’
+E4’ -> == E5E4’	| ~= E5E4’	| >= E5E4’	| <= E5E4’	| > E5E4’	| < E5E4’	| ε
+E5	-> E6 E5'
+E5' -> + E6 E5' | - E6 E5' | ε
+E6	-> E7 E6'
+E6' -> * E7 E6' | / E7 E6' | ε
+E7  -> E8E7'
+E7' -> ^E7 | ε
+E8  -> + E9 | - E9 | E9
+E9  -> id | const | (E1)

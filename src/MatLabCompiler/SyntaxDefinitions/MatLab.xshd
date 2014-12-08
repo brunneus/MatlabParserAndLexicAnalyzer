@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<SyntaxDefinition name="MatLab" extensions=".m" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="String" foreground="FireBrick" exampleText="string text = &quot;Hello, World!&quot;"/>
+	<Color name="Punctuation" exampleText="a(b.c);" />
+	<Color name="ValueTypes" fontWeight="bold" foreground="Red" exampleText="bool b = true;" />
+	<Color name="MethodCall" foreground="MidnightBlue" fontWeight="bold" exampleText="o.ToString();"/>
+	<Color name="NumberLiteral" foreground="DarkBlue" exampleText="3.1415f"/>
+	<Color name="NullOrValueKeywords" fontWeight="bold" exampleText="if (value == null)"/>
+	<Color name="Keywords" foreground="Blue" exampleText="if (a) {} else {}"/>
+	<Color name="TrueFalse" fontWeight="bold" foreground="DarkCyan" exampleText="b = false; a = true;" />
+	
+	<RuleSet>
+		<Span color="String">
+			<Begin>'</Begin>
+			<End>'</End>
+			<RuleSet>
+				<Span begin="\\" end="."/>
+			</RuleSet>
+		</Span>
+		
+		<Span color="String" multiline="true">
+			<Begin>@"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<Span begin='""' end=""/>
+			</RuleSet>
+		</Span>
+		
+		<Rule>
+			@[\w\d_]+
+		</Rule>
+		
+		<Keywords color="TrueFalse">
+			<Word>true</Word>
+			<Word>false</Word>
+		</Keywords>
+		<Keywords color="Keywords">
+			<Word>else</Word>
+			<Word>elseif</Word>
+			<Word>if</Word>
+			<Word>for</Word>
+			<Word>while</Word>
+			<Word>end</Word>
+			<Word>case</Word>
+			<Word>otherwise</Word>
+			<Word>while</Word>
+			<Word>do</Word>
+			<Word>switch</Word>
+		</Keywords>
+
+		<Keywords color="NullOrValueKeywords">
+			<Word>null</Word>
+		</Keywords>
+			
+		<Rule color="NumberLiteral">
+			\b0[xX][0-9a-fA-F]+  # hex number
+		|	
+			(	\b\d+(\.[0-9]+)?   #number with optional floating point
+			|	\.[0-9]+           #or just starting with floating point
+			)
+			([eE][+-]?[0-9]+)? # optional exponent
+		</Rule>
+		
+    <Rule color="MethodCall">
+		\b
+		[\d\w_]+  # an identifier
+		(?=\s*\() # followed by (
+		</Rule>
+      
+		<Rule color="Punctuation">
+			[?,.;()\[\]{}+\-/%*&lt;&gt;^+~!|&amp;]+
+		</Rule>
+	</RuleSet>
+</SyntaxDefinition>
