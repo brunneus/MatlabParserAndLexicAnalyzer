@@ -1,84 +1,84 @@
-﻿P  -> B $
+﻿P  -> B $ {P.cod = B.cod || "$"}
 
-B  -> if B5 B B1 B2 end B
-B  -> while B5 do B end B
-B  -> for id = B5 : E1 B end B
-B  -> E1 B7 B
-B  -> id B6 B
-B  -> switch B4 case B4 B B3 end B 
+B  -> if B5 B B1 B2 end B {B.cod = se || B5.cod || faca || B.cod || B1.cod || B2.cod || fimse || B.cod }
+B  -> while B5 do B end B {b.cod = enquanto || b5.cod || faça || b.cod || fimenquanto || b.cod}
+B  -> for id = B5 : E1 B end B { B.cod = para de || id.cod || = || B5.cod || ate || E1.Cod || faca || B.Cod || fimpara || B.Cod }
+B  -> E1 B7 B { B.cod = E1.Cod || B7.Cod || B.cod}
+B  -> id B6 B { B.cod = id.cod || B6.cod || b.cod}
+B  -> switch B4 case B4 B B3 end B  {B.cod = caso || B4Cod || seja || B4.cod || faca || B.cod || B3.cod || fimcaso || B.cod }
 B  -> ε
 
-B1 -> elseif B5 B B1
-B1 -> ε
+B1 -> elseif B5 B B1 {B1.cod = senao se || B5.cod || B.cod || B1.cod }
+B1 -> ε {B1.cod = ""}
 
-B2 -> else B
-B2 -> ε
+B2 -> else B {B2.cod = senao || B.cod}
+B2 -> ε { B2.cod = ""}
 
-B3 -> case B4 B B3
-B3 -> otherwise B
-B3 -> ε
+B3 -> case B4 B B3 {B3.cod = faca || B4.cod || B.cod || B3.cod}
+B3 -> otherwise B { B3.cod = casocontrario || B.cod}
+B3 -> ε {B3.cod = ""}
 
-B4 -> string
-B4 => B5
+B4 -> string { B4.cod = string.valor}
+B4 => B5 { B4.cod = B5.cod}
 
-B5 -> id F
-B5 -> E1
+B5 -> id F { B5.cod = id.valor || F.cod}
+B5 -> E1 { B5.cod = E1.cod}
 
-B6 -> = B4 B7
-B6 -> F B7
+B6 -> = B4 B7 { B6.cod = "=" || B4.cod || B7.cod}
+B6 -> F B7 { B6.cod = F.cod || B7.cod}
 
-B7 -> ; 
-B7 -> ε
+B7 -> ; {B7.cod = ";"}
+B7 -> ε {B7.cod = ""}
 
-F  -> (F1
-F1 -> ) 
-F1 -> F2)
+F  -> (F1 {F.Cod = "(" || F1.cod}
+F1 -> ) {F1.cod = "(" }
+F1 -> F2) { F1.cod = F2.cod || ")"}
 
-F2 -> B4 F3
+F2 -> B4 F3 {F2.cod = B4.cod || F3.cod}
 
-F3 -> ,F2 
-F3 -> | ε
+F3 -> ,F2  {F3.cod = "," || F2.cod}
+F3 -> | ε {F3.cod = "|" || ""}
 
-E1	-> E2E1'
-E1' -> ∨ E2 E1' 
-E1' -> ε
+E1	-> E2E1' { E1.cod = E2.cod || E1.cod}
+E1' -> ∨ E2 E1' {E1'.cod = "V" || E1.cod || E1'.cod}
+E1' -> ε { E1'.cod = ""}
 
-E2  -> E3 E2'
-E2' -> & E3 E2' 
-E2' -> | ε
+E2  -> E3 E2' { E2.cod = E3.cod || E2'.cod}
+E2' -> & E3 E2' {E2'.cod = "&" || E3.cod || E2'.cod}
+E2' -> | ε { E2'.cod = "|" || ""}
 
-E3  -> E4E3'
-E3' -> ||E4E3'
-E3' -> &&E4E3'
-E3' -> ε
+E3  -> E4E3' { E3.cod = E4.cod || E3'.cod}
+E3' -> ||E4E3' {E3'.cod = "||" || E4.cod || E3'.cod}
+E3' -> &&E4E3' {E3'.cod = "&&" E4.cod || E3'.cod}
+E3' -> ε {E3'.cod = ""}
 
-E4  -> E5E4’
-E4’ -> == E5E4’
-E4’ -> ~= E5E4’
-E4’ -> >= E5E4’
-E4’ -> <= E5E4’
-E4’ -> > E5E4’
-E4’ -> < E5E4’
-E4’ -> ε
+E4  -> E5E4’ {E4.cod = E5.cod || E4'.cod}
+E4’ -> == E5E4’ {E4'.cod = "==" || E5.cod || E4'.cod}
+E4’ -> ~= E5E4’ {E4'.cod = "~=" || E5.cod || E4'.cod}
+E4’ -> >= E5E4’ {E4'.cod = ">=" || E5.cod || E4'.cod}
+E4’ -> <= E5E4’ {E4'.cod = "<=" || E5.cod || E4'.cod}
+E4’ -> > E5E4’ {E4'.cod = ">" || E5.cod || E4'.cod}
+E4’ -> < E5E4’ {E4'.cod = "<" || E5.cod || E4'.cod}
+E4’ -> ε { E4'.cod = ""}
 
-E5	-> E6 E5'
-E5' -> + E6 E5'
-E5' -> - E6 E5'
-E5' -> ε
+E5	-> E6 E5' { E5.cod = E6.cod || E5'.cod}
+E5' -> + E6 E5' { E5'.cod = "+" || E6.cod || E5'.cod}
+E5' -> - E6 E5' { E5'.cod = "-" || E6.cod || E5'.cod}
+E5' -> ε { E5'.cod = ""}
 
-E6	-> E7 E6'
-E6' -> * E7 E6'
-E6' -> / E7 E6'
-E6' -> ε
+E6	-> E7 E6' { E6.cod = E7.cod || E6'.cod}
+E6' -> * E7 E6' { E6'.cod = "*" || E7.cod || E6'.Cod }
+E6' -> / E7 E6' { E6'.cod = "/" || E7.cod || E6'.Cod }
+E6' -> ε {E6'.cod = ""}
 
-E7  -> E8E7'
-E7' -> ^E7
-E7' -> ε
+E7  -> E8E7' { E7.cod = E8.cod || E7'.cod}
+E7' -> ^E7 { E7.cod = "^" || E7.cod}
+E7' -> ε { E7'.cod = ""}
 
-E8  -> + E9
-E8  -> - E9
-E8  -> E9
+E8  -> + E9 {E8.cod = "+" || E9.cod}
+E8  -> - E9 {E8.cod = "-" || E9.cod}
+E8  -> E9 {E8.cod = E9.cod}
 
-E9  -> id
-E9  -> const
-E9  -> (E1)
+E9  -> id { E9.cod = id.valor}
+E9  -> const {E9.cod = const.valor}
+E9  -> (E1) { E9.cod = E1.cod}
