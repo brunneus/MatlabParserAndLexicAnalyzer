@@ -29,9 +29,9 @@ namespace MatLabCompiler.Syntatic
 
         #region Blocks
 
-        public bool P(ref string cod, ref string erros)
+        public bool P(ref string cod)
         {
-            if (B(ref cod, ref erros))
+            if (B(ref cod))
             {   
                 return _currentToken.Lexeme == "$";
             }
@@ -39,7 +39,7 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool B(ref string cod, ref string errors)
+        private bool B(ref string cod)
         {
             if (_currentToken.Lexeme == "if")
             {
@@ -47,7 +47,7 @@ namespace MatLabCompiler.Syntatic
 
                 if (this.B5(ref cod))
                 {
-                    if (this.B(ref cod, ref string errors))
+                    if (this.B(ref cod))
                     {
                         if (this.B1(ref cod))
                         {
@@ -755,7 +755,7 @@ namespace MatLabCompiler.Syntatic
             _currentToken = tokens.First();
 
 
-            if (this.P(ref cod, ref errors))
+            if (this.P(ref cod))
                 this.SyntaticResults.Add("Success");
             else
                 this.SyntaticResults.Add("Unexpected token " + _currentToken);
