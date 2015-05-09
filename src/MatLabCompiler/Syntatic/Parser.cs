@@ -157,7 +157,7 @@ namespace MatLabCompiler.Syntatic
                 {
                     if (this.B(ref B_1Cod))
                     {
-                        cod = string.Concat(id, B6Cod, B_1Cod);
+                        cod = string.Concat(cod, id, B6Cod, B_1Cod);
                     }
                 }
 
@@ -379,7 +379,7 @@ namespace MatLabCompiler.Syntatic
             {
                 if (this.E1_(ref E1_Cod))
                 {
-                    E1COD = string.Concat(E2Cod, E1_Cod, "\n");
+                    E1COD = string.Concat(E1COD, E2Cod, E1_Cod, "\n");
                     return true;
                 }
             }
