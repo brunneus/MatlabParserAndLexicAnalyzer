@@ -379,12 +379,37 @@ namespace MatLabCompiler.Syntatic
             {
                 if (this.E1_(ref E1_Cod))
                 {
-                    E1COD = string.Concat(E1COD, E2Cod, E1_Cod, "\n");
+                    string newLine = "\n";
+                    if (this.HasUnclosedBracesUntilCurrentPosition())
+                        newLine = "";
+
+                    E1COD = string.Concat(E1COD, E2Cod, E1_Cod, newLine);
                     return true;
                 }
             }
 
             return false;
+        }
+
+        private bool HasUnclosedBracesUntilCurrentPosition()
+        {
+            int openBracesCount = 0;
+            int closeBracesCount = 0;
+            int index = 0;
+            foreach (var token in _sentence)
+            {
+                index++;
+
+                if (token.Lexeme == "(")
+                    openBracesCount++;
+                else if (token.Lexeme == ")")
+                    closeBracesCount++;
+
+                if (index >= _currentIndex)
+                    break;
+            }
+
+            return openBracesCount != closeBracesCount;
         }
 
         public bool E1_(ref string E1_Cod)
