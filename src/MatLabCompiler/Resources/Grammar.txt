@@ -1,10 +1,14 @@
 ﻿P  -> B $ {P.cod = B.cod || "$"}
 
 B  -> if B5 B B1 B2 end B {B.cod = se || B5.cod || faca || B.cod || B1.cod || B2.cod || fimse || B.cod }
-B  -> while B5 do B end B {b.cod = enquanto || b5.cod || faça || b.cod || fimenquanto || b.cod}
+
+B  -> while B5 B end B {b.cod = enquanto || b5.cod || faça || b.cod || fimenquanto || b.cod}
+
 B  -> for id = B5 : E1 B end B { B.cod = para de || id.cod || = || B5.cod || ate || E1.Cod || faca || B.Cod || fimpara || B.Cod }
 B  -> E1 B7 B { B.cod = E1.Cod || B7.Cod || B.cod}
+
 B  -> id {PoeTabSimb(id)} B6 B { B.cod = id.cod || B6.cod || b.cod}
+
 B  -> switch B4 case B4 B B3 end B  {B.cod = caso || B4Cod || seja || B4.cod || faca || B.cod || B3.cod || fimcaso || B.cod }
 B  -> ε
 

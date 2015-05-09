@@ -1,0 +1,1 @@
+C:\Users\Patrick\Workspaces\MatLabParser\MatlabParserAndLexicAnalyzer\src\MatLabCompiler\bin\Release\MatLabCompiler.exe.config

@@ -11,7 +11,7 @@ namespace MatLabCompiler.Syntatic
         {
             this.SyntaticResults = new ObservableCollection<string>();
         }
-        
+
         #endregion
 
         #region Attributes and Properties
@@ -32,7 +32,7 @@ namespace MatLabCompiler.Syntatic
         public bool P(ref string cod)
         {
             if (B(ref cod))
-            {   
+            {
                 return _currentToken.Lexeme == "$";
             }
 
@@ -62,7 +62,6 @@ namespace MatLabCompiler.Syntatic
                         }
                     }
                 }
-
                 return false;
             }
             else if (_currentToken.Lexeme == "while")
@@ -70,16 +69,12 @@ namespace MatLabCompiler.Syntatic
                 this.NextToken();
                 if (this.B5(ref cod))
                 {
-                    if (_currentToken.Lexeme == "do")
+                    if (this.B(ref cod))
                     {
-                        this.NextToken();
-                        if (this.B(ref cod))
+                        if (_currentToken.Lexeme == "end")
                         {
-                            if (_currentToken.Lexeme == "end")
-                            {
-                                this.NextToken();
-                                return this.B(ref cod);
-                            }
+                            this.NextToken();
+                            return this.B(ref cod);
                         }
                     }
                 }
@@ -102,12 +97,16 @@ namespace MatLabCompiler.Syntatic
                                 this.NextToken();
                                 if (this.E1(ref cod))
                                 {
-                                    if (this.B(ref cod))
+                                    if (_currentToken.Lexeme == ":")
                                     {
-                                        if (_currentToken.Lexeme == "end")
+                                        this.NextToken();
+                                        if (this.B(ref cod))
                                         {
-                                            this.NextToken();
-                                            return this.B(ref cod);
+                                            if (_currentToken.Lexeme == "end")
+                                            {
+                                                this.NextToken();
+                                                return this.B(ref cod);
+                                            }
                                         }
                                     }
                                 }
@@ -380,7 +379,7 @@ namespace MatLabCompiler.Syntatic
             {
                 if (this.E1_(ref E1_Cod))
                 {
-                    E1COD = string.Concat(E2Cod, E1_Cod);
+                    E1COD = string.Concat(E2Cod, E1_Cod, "\n");
                     return true;
                 }
             }
@@ -445,7 +444,7 @@ namespace MatLabCompiler.Syntatic
                         return true;
                     }
                 }
-                
+
                 return false;
             }
 
@@ -462,7 +461,7 @@ namespace MatLabCompiler.Syntatic
                 if (this.E3_(ref E3_Cod))
                 {
                     E3Cod = string.Concat(E4Cod, E3_Cod);
-                    return true ;
+                    return true;
                 }
             }
 
@@ -500,7 +499,7 @@ namespace MatLabCompiler.Syntatic
 
             if (this.E5(ref E5Cod))
             {
-                if(this.E4_(ref E4_Cod))
+                if (this.E4_(ref E4_Cod))
                 {
                     E4Cod = string.Concat(E5Cod, E4_Cod);
                     return true;
@@ -627,7 +626,7 @@ namespace MatLabCompiler.Syntatic
 
             if (this.E8(ref E8Cod))
             {
-                if(E7_(ref E7_Cod))
+                if (E7_(ref E7_Cod))
                 {
                     E7Cod = string.Concat(E8Cod, E7_Cod);
                     return true;
@@ -640,7 +639,7 @@ namespace MatLabCompiler.Syntatic
         private bool E7_(ref string E7_Cod)
         {
             string E7Cod = string.Empty;
-            
+
             if (this.CompareStringToCurrentToken("^"))
             {
                 var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
@@ -659,7 +658,7 @@ namespace MatLabCompiler.Syntatic
         private bool E8(ref string E8Cod)
         {
             string E9Cod = string.Empty;
-            
+
             if (this.CompareStringToCurrentToken("+") || this.CompareStringToCurrentToken("-"))
             {
                 var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
@@ -760,7 +759,7 @@ namespace MatLabCompiler.Syntatic
             else
                 this.SyntaticResults.Add("Unexpected token " + _currentToken);
         }
-        
+
         #endregion
     }
 }
