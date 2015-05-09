@@ -64,6 +64,7 @@
     <Compile Include="eTokenType.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Lexic\LexicError.cs" />
+    <Compile Include="SimbolConverter.cs" />
     <Compile Include="Syntatic\Parser.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Lexic\LexicAnalyzer.cs" />

@@ -29,32 +29,34 @@ namespace MatLabCompiler.Syntatic
 
         #region Blocks
 
-        public bool P()
+        public bool P(ref string cod, ref string erros)
         {
-            if (B())
+            if (B(ref cod, ref erros))
+            {   
                 return _currentToken.Lexeme == "$";
+            }
 
             return false;
         }
 
-        private bool B()
+        private bool B(ref string cod, ref string errors)
         {
             if (_currentToken.Lexeme == "if")
             {
                 this.NextToken();
 
-                if (this.B5())
+                if (this.B5(ref cod))
                 {
-                    if (this.B())
+                    if (this.B(ref cod, ref string errors))
                     {
-                        if (this.B1())
+                        if (this.B1(ref cod))
                         {
-                            if (this.B2())
+                            if (this.B2(ref cod))
                             {
                                 if (_currentToken.Lexeme == "end")
                                 {
                                     this.NextToken();
-                                    return this.B();
+                                    return this.B(ref cod);
                                 }
                             }
                         }
@@ -66,17 +68,17 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "while")
             {
                 this.NextToken();
-                if (this.B5())
+                if (this.B5(ref cod))
                 {
                     if (_currentToken.Lexeme == "do")
                     {
                         this.NextToken();
-                        if (this.B())
+                        if (this.B(ref cod))
                         {
                             if (_currentToken.Lexeme == "end")
                             {
                                 this.NextToken();
-                                return this.B();
+                                return this.B(ref cod);
                             }
                         }
                     }
@@ -93,19 +95,19 @@ namespace MatLabCompiler.Syntatic
                     if (_currentToken.Lexeme == "=")
                     {
                         this.NextToken();
-                        if (this.B5())
+                        if (this.B5(ref cod))
                         {
                             if (_currentToken.Lexeme == ":")
                             {
                                 this.NextToken();
-                                if (this.E1())
+                                if (this.E1(ref cod))
                                 {
-                                    if (this.B())
+                                    if (this.B(ref cod))
                                     {
                                         if (_currentToken.Lexeme == "end")
                                         {
                                             this.NextToken();
-                                            return this.B();
+                                            return this.B(ref cod);
                                         }
                                     }
                                 }
@@ -119,21 +121,21 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "switch")
             {
                 this.NextToken();
-                if (this.B4())
+                if (this.B4(ref cod))
                 {
                     if (_currentToken.Lexeme == "case")
                     {
                         this.NextToken();
-                        if (this.B4())
+                        if (this.B4(ref cod))
                         {
-                            if (this.B())
+                            if (this.B(ref cod))
                             {
-                                if (this.B3())
+                                if (this.B3(ref cod))
                                 {
                                     if (_currentToken.Lexeme == "end")
                                     {
                                         this.NextToken();
-                                        return this.B();
+                                        return this.B(ref cod);
                                     }
                                 }
                             }
@@ -145,19 +147,28 @@ namespace MatLabCompiler.Syntatic
             }
             else if (_currentToken.Type == eTokenType.Identifier)
             {
+                string B6Cod = string.Empty;
+                string B_1Cod = string.Empty;
+                string id = _currentToken.Lexeme;
+
                 this.SaveToken();
                 this.NextToken();
 
-                if (this.B6())
-                    return this.B();
+                if (this.B6(ref B6Cod))
+                {
+                    if (this.B(ref B_1Cod))
+                    {
+                        cod = string.Concat(id, B6Cod, B_1Cod);
+                    }
+                }
 
                 this.RestoreToken();
             }
             SaveToken();
-            if (this.E1())
+            if (this.E1(ref cod))
             {
-                if (this.B7())
-                    return this.B();
+                if (this.B7(ref cod))
+                    return this.B(ref cod);
 
                 return false;
             }
@@ -165,15 +176,15 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B1()
+        private bool B1(ref string cod)
         {
             if (_currentToken.Lexeme == "elseif")
             {
                 this.NextToken();
-                if (this.B5())
+                if (this.B5(ref cod))
                 {
-                    if (this.B())
-                        return this.B1();
+                    if (this.B(ref cod))
+                        return this.B1(ref cod);
                 }
 
                 return false;
@@ -182,27 +193,27 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B2()
+        private bool B2(ref string cod)
         {
             if (_currentToken.Lexeme == "else")
             {
                 this.NextToken();
-                return this.B();
+                return this.B(ref cod);
             }
 
             return true;
         }
 
-        private bool B3()
+        private bool B3(ref string cod)
         {
             if (_currentToken.Lexeme == "case")
             {
                 this.NextToken();
-                if (this.B4())
+                if (this.B4(ref cod))
                 {
-                    if (this.B())
+                    if (this.B(ref cod))
                     {
-                        return this.B3();
+                        return this.B3(ref cod);
                     }
                 }
 
@@ -211,7 +222,7 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "otherwise")
             {
                 this.NextToken();
-                if (this.B())
+                if (this.B(ref cod))
                     return true;
 
                 return false;
@@ -220,14 +231,14 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B4()
+        private bool B4(ref string cod)
         {
             if (_currentToken.Type == eTokenType.String)
             {
                 this.NextToken();
                 return true;
             }
-            else if (this.B5())
+            else if (this.B5(ref cod))
             {
                 return true;
             }
@@ -235,18 +246,18 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool B5()
+        private bool B5(ref string cod)
         {
             if (_currentToken.Type == eTokenType.Identifier)
             {
                 this.SaveToken();
                 this.NextToken();
-                if (this.F())
+                if (this.F(ref cod))
                     return true;
 
                 this.RestoreToken();
             }
-            if (this.E1())
+            if (this.E1(ref cod))
             {
                 return true;
             }
@@ -254,23 +265,30 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool B6()
+        private bool B6(ref string B6Cod)
         {
+            string B4Cod = string.Empty;
+            string B7Cod = string.Empty;
+            string FCod = string.Empty;
+
             if (_currentToken.Lexeme == "=")
             {
+                var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.B4())
+                if (this.B4(ref B4Cod))
                 {
-                    if (this.B7())
+                    if (this.B7(ref B7Cod))
                     {
+                        B6Cod = string.Concat(convertedToken, B4Cod, B7Cod);
                         return true;
                     }
                 }
             }
-            else if (this.F())
+            else if (this.F(ref FCod))
             {
-                if (this.B7())
+                if (this.B7(ref B7Cod))
                 {
+                    B6Cod = string.Concat(FCod, B7Cod);
                     return true;
                 }
             }
@@ -278,7 +296,7 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool B7()
+        private bool B7(ref string cod)
         {
             if (_currentToken.Lexeme == ";")
             {
@@ -293,26 +311,26 @@ namespace MatLabCompiler.Syntatic
 
         #region Functions
 
-        private bool F()
+        private bool F(ref string cod)
         {
             if (_currentToken.Lexeme == "(")
             {
                 this.NextToken();
-                if (this.F1())
+                if (this.F1(ref cod))
                     return true;
             }
 
             return false;
         }
 
-        private bool F1()
+        private bool F1(ref string cod)
         {
             if (_currentToken.Lexeme == ")")
             {
                 this.NextToken();
                 return true;
             }
-            else if (this.F2())
+            else if (this.F2(ref cod))
             {
                 if (_currentToken.Lexeme == ")")
                 {
@@ -324,23 +342,23 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool F2()
+        private bool F2(ref string cod)
         {
-            if (this.B4())
+            if (this.B4(ref cod))
             {
-                if (this.F3())
+                if (this.F3(ref cod))
                     return true;
             }
 
             return false;
         }
 
-        private bool F3()
+        private bool F3(ref string cod)
         {
             if (_currentToken.Lexeme == ",")
             {
                 this.NextToken();
-                if (this.F2())
+                if (this.F2(ref cod))
                     return true;
 
                 return false;
@@ -353,21 +371,40 @@ namespace MatLabCompiler.Syntatic
 
         #region Expression
 
-        public bool E1()
+        public bool E1(ref string E1COD)
         {
-            if (this.E2())
-                return this.E1_();
+            string E2Cod = string.Empty;
+            string E1_Cod = string.Empty;
+
+            if (this.E2(ref E2Cod))
+            {
+                if (this.E1_(ref E1_Cod))
+                {
+                    E1COD = string.Concat(E2Cod, E1_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        public bool E1_()
+        public bool E1_(ref string E1_Cod)
         {
+            string E2Cod = string.Empty;
+            string E1_1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("|"))
             {
                 this.NextToken();
-                if (this.E2())
-                    return this.E1_();
+
+                if (this.E2(ref E2Cod))
+                {
+                    if (this.E1_(ref E1_1Cod))
+                    {
+                        E1_Cod = string.Concat("|", E2Cod, E1_1Cod);
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -375,21 +412,39 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        public bool E2()
+        public bool E2(ref string E2Cod)
         {
-            if (this.E3())
-                return this.E2_();
+            string E2_Cod = string.Empty;
+            string E3Cod = string.Empty;
+
+            if (this.E3(ref E3Cod))
+            {
+                if (this.E2_(ref E2_Cod))
+                {
+                    E2Cod = string.Concat(E3Cod, E2_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        private bool E2_()
+        private bool E2_(ref string E2_Cod)
         {
+            string E3Cod = string.Empty;
+            string E2_1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("&"))
             {
                 this.NextToken();
-                if (this.E3())
-                    return this.E2_();
+                if (this.E3(ref E3Cod))
+                {
+                    if (this.E2_(ref E2_1Cod))
+                    {
+                        E2_Cod = string.Concat("&", E3Cod, E2_1Cod);
+                        return true;
+                    }
+                }
                 
                 return false;
             }
@@ -397,21 +452,40 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool E3()
+        private bool E3(ref string E3Cod)
         {
-            if (this.E4())
-                return this.E3_();
+            string E4Cod = string.Empty;
+            string E3_Cod = string.Empty;
+
+            if (this.E4(ref E4Cod))
+            {
+                if (this.E3_(ref E3_Cod))
+                {
+                    E3Cod = string.Concat(E4Cod, E3_Cod);
+                    return true ;
+                }
+            }
 
             return false;
         }
 
-        private bool E3_()
+        private bool E3_(ref string E3_Cod)
         {
+            string E4Cod = string.Empty;
+            string E3_1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("||") || this.CompareStringToCurrentToken("&&"))
             {
+                string currentToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.E4())
-                    return this.E3_();
+                if (this.E4(ref E4Cod))
+                {
+                    if (this.E3_(ref E3_1Cod))
+                    {
+                        E3_Cod = string.Concat(currentToken, E4Cod, E3_1Cod);
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -419,22 +493,42 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        public bool E4()
+        public bool E4(ref string E4Cod)
         {
-            if (this.E5())
-                return this.E4_();
+            string E5Cod = string.Empty;
+            string E4_Cod = string.Empty;
+
+            if (this.E5(ref E5Cod))
+            {
+                if(this.E4_(ref E4_Cod))
+                {
+                    E4Cod = string.Concat(E5Cod, E4_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        private bool E4_()
+        private bool E4_(ref string E4_Cod)
         {
+            string E4_1Cod = string.Empty;
+            string E5Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("==") || this.CompareStringToCurrentToken("~=") || this.CompareStringToCurrentToken(">=") ||
                 this.CompareStringToCurrentToken("<=") || this.CompareStringToCurrentToken("<") || this.CompareStringToCurrentToken(">"))
             {
+                string convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.E5())
-                    return this.E4_();
+
+                if (this.E5(ref E5Cod))
+                {
+                    if (this.E4_(ref E4_1Cod))
+                    {
+                        E4_Cod = string.Concat(convertedToken, E5Cod, E4_1Cod);
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -442,21 +536,41 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool E5()
+        private bool E5(ref string E5Cod)
         {
-            if (this.E6())
-                return this.E5_();
+            string E6Cod = string.Empty;
+            string E5_Cod = string.Empty;
+
+            if (this.E6(ref E6Cod))
+            {
+                if (this.E5_(ref E5_Cod))
+                {
+                    E5Cod = string.Concat(E6Cod, E5_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        private bool E5_()
+        private bool E5_(ref string E5_Cod)
         {
+            string E6Cod = string.Empty;
+            string E5_1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("+") || this.CompareStringToCurrentToken("-"))
             {
+                var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.E6())
-                    return this.E5_();
+
+                if (this.E6(ref E6Cod))
+                {
+                    if (this.E5_(ref E5_1Cod))
+                    {
+                        E5_Cod = string.Concat(convertedToken, E6Cod, E5_1Cod);
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -464,21 +578,41 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool E6()
+        private bool E6(ref string E6Cod)
         {
-            if (this.E7())
-                return this.E6_();
+            string E7Cod = string.Empty;
+            string E6_Cod = string.Empty;
+
+            if (this.E7(ref E7Cod))
+            {
+                if (this.E6_(ref E6_Cod))
+                {
+                    E6Cod = string.Concat(E7Cod, E6_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        private bool E6_()
+        private bool E6_(ref string E6_Cod)
         {
+            string E7Cod = string.Empty;
+            string E6_1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken("*") || this.CompareStringToCurrentToken("/"))
             {
+                var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.E7())
-                    return this.E6_();
+
+                if (this.E7(ref E7Cod))
+                {
+                    if (this.E6_(ref E6_1Cod))
+                    {
+                        E6_Cod = string.Concat(convertedToken, E7Cod, E6_1Cod);
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -486,60 +620,85 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool E7()
+        private bool E7(ref string E7Cod)
         {
-            if (this.E8())
-                return E7_();
+            string E8Cod = string.Empty;
+            string E7_Cod = string.Empty;
+
+            if (this.E8(ref E8Cod))
+            {
+                if(E7_(ref E7_Cod))
+                {
+                    E7Cod = string.Concat(E8Cod, E7_Cod);
+                    return true;
+                }
+            }
 
             return false;
         }
 
-        private bool E7_()
+        private bool E7_(ref string E7_Cod)
         {
+            string E7Cod = string.Empty;
+            
             if (this.CompareStringToCurrentToken("^"))
             {
+                var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                return this.E7();
+
+                if (this.E7(ref E7Cod))
+                {
+                    E7_Cod = string.Concat(convertedToken, E7Cod);
+                    return true;
+                }
             }
 
             return true;
         }
 
-        private bool E8()
+        private bool E8(ref string E8Cod)
         {
-            if (this.CompareStringToCurrentToken("+"))
+            string E9Cod = string.Empty;
+            
+            if (this.CompareStringToCurrentToken("+") || this.CompareStringToCurrentToken("-"))
             {
+                var convertedToken = SimbolConverter.Converter(_currentToken.Lexeme);
                 this.NextToken();
-                if (this.E9())
+
+                if (this.E9(ref E9Cod))
+                {
+                    E8Cod = string.Concat(convertedToken, E9Cod);
                     return true;
+                }
             }
-            else if (this.CompareStringToCurrentToken("-"))
+            else if (this.E9(ref E9Cod))
             {
-                this.NextToken();
-                if (this.E9())
-                    return true;
-            }
-            else if (this.E9())
+                E8Cod = E9Cod;
                 return true;
+            }
 
             return false;
         }
 
-        private bool E9()
+        private bool E9(ref string E9Cod)
         {
+            string E1Cod = string.Empty;
+
             if (this.CompareStringToCurrentToken(eTokenType.Identifier) || this.CompareStringToCurrentToken(eTokenType.Constant))
             {
+                E9Cod = _currentToken.Lexeme;
                 this.NextToken();
                 return true;
             }
             else if (this.CompareStringToCurrentToken("("))
             {
                 this.NextToken();
-                if (this.E1())
+                if (this.E1(ref E1Cod))
                 {
                     if (this.CompareStringToCurrentToken(")"))
                     {
                         this.NextToken();
+                        E9Cod = string.Format("({0})", E1Cod);
                         return true;
                     }
                 }
@@ -585,7 +744,7 @@ namespace MatLabCompiler.Syntatic
 
         #region Public Methods
 
-        public void Analyze(IEnumerable<Token> tokens)
+        public void Analyze(IEnumerable<Token> tokens, ref string cod, ref string errors)
         {
             this.SyntaticResults.Clear();
             if (tokens.Count() <= 1)
@@ -594,7 +753,9 @@ namespace MatLabCompiler.Syntatic
             _sentence = tokens;
             _currentIndex = 0;
             _currentToken = tokens.First();
-            if (this.P())
+
+
+            if (this.P(ref cod, ref errors))
                 this.SyntaticResults.Add("Success");
             else
                 this.SyntaticResults.Add("Unexpected token " + _currentToken);

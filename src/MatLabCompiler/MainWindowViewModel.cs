@@ -7,11 +7,12 @@ using MatLabCompiler.Syntatic;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using System.Xml;
 
 namespace MatLabCompiler
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : DependencyObject
     {
         #region Constructors
 
@@ -41,10 +42,20 @@ namespace MatLabCompiler
             set { _parser = value; }
         }
 
+        public string GeneratedCode
+        {
+            get { return (string)GetValue(GeneratedCodeProperty); }
+            set { SetValue(GeneratedCodeProperty, value); }
+        }
+
+        public static readonly DependencyProperty GeneratedCodeProperty =
+                DependencyProperty.Register("GeneratedCode", typeof(string), typeof(MainWindowViewModel));
+
+
         #endregion
 
         #region Commands
-        
+
         private RelayCommand _textChangedCommand;
         public RelayCommand TextChangedCommand
         {
@@ -74,7 +85,7 @@ namespace MatLabCompiler
         #endregion
 
         #region Private Methods
-        
+
         private void CreateOnLoadCommand()
         {
             _onLoadCommand = new RelayCommand
@@ -113,8 +124,12 @@ namespace MatLabCompiler
 
         private void Analyze(string text)
         {
+            string generatedCod = string.Empty;
+            string errors = string.Empty;
             _lexicAnaliyzer.Analyze(text);
-            _parser.Analyze(_lexicAnaliyzer.Tokens);
+            _parser.Analyze(_lexicAnaliyzer.Tokens, ref generatedCod, ref errors);
+
+            this.GeneratedCode = generatedCod;
         }
 
         #endregion

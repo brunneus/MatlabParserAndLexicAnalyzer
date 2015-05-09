@@ -102,8 +102,9 @@
                 Grid.Row="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <Grid
                         Grid.Column="1"
@@ -132,6 +133,16 @@
                                 BorderThickness="0, 1, 0, 1"
                                 Grid.Row="1"
                                 ItemsSource="{Binding LexicAnaliyzer.Errors, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid
+                        Grid.Column="1"
+                        Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="GeneratedCod" Foreground="Green" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="1" Text="{Binding GeneratedCode, Mode=TwoWay}"/>
                     </Grid>
                 </Grid>
             </Border>
