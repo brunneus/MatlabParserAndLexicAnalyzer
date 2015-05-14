@@ -11,13 +11,52 @@ namespace MatLabCompiler
         public static string Converter(string simbol)
         {
             if (simbol.Equals("=="))
-                return "=";
+                return " = ";
 
-            if(simbol.Equals("~="))
-                return "<>";
+            if (simbol.Equals("~="))
+                return " <> ";
 
             if (simbol.Equals("="))
-                return "<-";
+                return " <- ";
+
+            if (simbol.Equals("||"))
+                return " OU ";
+
+            if (simbol.Equals("&&"))
+                return " E ";
+
+            if (simbol.Equals("&"))
+                return " & ";
+
+            if (simbol.Equals("|"))
+                return " | ";
+
+            if (simbol.Equals("+"))
+                return " + ";
+
+            if (simbol.Equals("-"))
+                return " - ";
+
+            if (simbol.Equals("<"))
+                return " < ";
+
+            if (simbol.Equals(">"))
+                return " > ";
+
+            if (simbol.Equals("<="))
+                return " <= ";
+
+            if (simbol.Equals(">"))
+                return " >= ";
+
+            if (simbol.Equals("*"))
+                return " * ";
+
+            if (simbol.Equals("/"))
+                return " / ";
+
+            if (simbol.Equals("^"))
+                return " ^ ";
 
             return simbol;
         }
