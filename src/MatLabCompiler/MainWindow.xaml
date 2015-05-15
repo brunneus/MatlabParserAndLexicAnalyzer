@@ -141,8 +141,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="GeneratedCod" Foreground="Green" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Row="1" Text="{Binding GeneratedCode, Mode=TwoWay}"/>
+                        <TextBlock Grid.Row="0" Text="GeneratedCod" Foreground="Green" HorizontalAlignment="Center"/>                 
+                               <TextBox IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" Text="{Binding GeneratedCode, Mode=TwoWay}"/>
                     </Grid>
                 </Grid>
             </Border>
