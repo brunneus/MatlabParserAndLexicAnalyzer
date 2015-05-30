@@ -18,7 +18,7 @@ B1 -> ε {B1.cod = ""}
 B2 -> else B {B2.cod = senao || B.cod}
 B2 -> ε { B2.cod = ""}
 
-B3 -> case B4 B B3 {B3.cod = faca || B4.cod || B.cod || B3.cod}
+B3 -> case B4 B B3 {B3.cod = caso || B4.cod || B.cod || B3.cod}
 B3 -> otherwise B { B3.cod = casocontrario || B.cod}
 B3 -> ε {B3.cod = ""}
 
