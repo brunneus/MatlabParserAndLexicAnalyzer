@@ -31,6 +31,8 @@ namespace MatLabCompiler.Syntatic
 
         public bool P(ref string cod)
         {
+            cod += "Inicio\n";
+
             if (B(ref cod))
             {
                 return _currentToken.Lexeme == "$";
@@ -39,42 +41,66 @@ namespace MatLabCompiler.Syntatic
             return false;
         }
 
-        private bool B(ref string cod)
+        private bool B(ref string BCOD)
         {
             if (_currentToken.Lexeme == "if")
             {
+                string B5COD = string.Empty;
+                string B_COD = string.Empty;
+                string BR_COD = string.Empty;
+                string B1COD = string.Empty;
+                string B2COD = string.Empty;
                 this.NextToken();
 
-                if (this.B5(ref cod))
+                if (this.B5(ref B5COD))
                 {
-                    if (this.B(ref cod))
+                    if (this.B(ref B_COD))
                     {
-                        if (this.B1(ref cod))
+                        if (this.B1(ref B1COD))
                         {
-                            if (this.B2(ref cod))
+                            if (this.B2(ref B2COD))
                             {
                                 if (_currentToken.Lexeme == "end")
                                 {
                                     this.NextToken();
-                                    return this.B(ref cod);
+                                    if(this.B(ref BR_COD))
+                                    {
+                                        BCOD += string.Format("{0}{1}{2}{3}{4}{5}{6}{7}", "se ", B5COD, "entao\n", B_COD, B1COD, B2COD, BR_COD, "\nfimse");
+                                        return true;
+                                    }
+
+                                    return false;
                                 }
                             }
                         }
                     }
                 }
+
                 return false;
             }
             else if (_currentToken.Lexeme == "while")
             {
+                string B5COD = string.Empty;
+                string B_COD = string.Empty;
+                string BR_COD = string.Empty;
+
                 this.NextToken();
-                if (this.B5(ref cod))
+
+                if (this.B5(ref B5COD))
                 {
-                    if (this.B(ref cod))
+                    if (this.B(ref B_COD))
                     {
                         if (_currentToken.Lexeme == "end")
                         {
                             this.NextToken();
-                            return this.B(ref cod);
+
+                            if(this.B(ref BR_COD))
+                            {
+                                BCOD += string.Format("enquanto {0} faca\n {1} \nfimenquanto {2}", B5COD, B_COD, BR_COD);
+                                return true;
+                            }
+
+                            return false;
                         }
                     }
                 }
@@ -84,31 +110,42 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "for")
             {
                 this.NextToken();
+
+                string B5COD = string.Empty;
+                string E1COD = string.Empty;
+                string B_COD = string.Empty;
+                string BRCOD = string.Empty;
+
                 if (_currentToken.Type == eTokenType.Identifier)
                 {
+                    string identifier = _currentToken.Lexeme;
+
                     this.NextToken();
                     if (_currentToken.Lexeme == "=")
                     {
                         this.NextToken();
-                        if (this.B5(ref cod))
+                        if (this.B5(ref B5COD))
                         {
                             if (_currentToken.Lexeme == ":")
                             {
                                 this.NextToken();
-                                if (this.E1(ref cod))
+                                if (this.E1(ref E1COD))
                                 {
-                                    if (_currentToken.Lexeme == ":")
-                                    {
-                                        this.NextToken();
-                                        if (this.B(ref cod))
+                                        if (this.B(ref B_COD))
                                         {
                                             if (_currentToken.Lexeme == "end")
                                             {
                                                 this.NextToken();
-                                                return this.B(ref cod);
+                                                if (this.B(ref BRCOD))
+                                                {
+                                                    BCOD += string.Format("para de {0} = {1} ate {2} faca {3} \nfimpara {4}", identifier, B5COD, E1COD, B_COD, BRCOD);
+                                                    return true;
+                                                }
+
+                                                return false;
                                             }
                                         }
-                                    }
+                                    
                                 }
                             }
                         }
@@ -120,21 +157,33 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "switch")
             {
                 this.NextToken();
-                if (this.B4(ref cod))
+
+                string B4COD = string.Empty;
+                string B3COD = string.Empty;
+                string B4_COD = string.Empty;
+                string B_COD = string.Empty;
+                string BRCOD = string.Empty;
+
+                if (this.B4(ref B4COD))
                 {
                     if (_currentToken.Lexeme == "case")
                     {
                         this.NextToken();
-                        if (this.B4(ref cod))
+                        if (this.B4(ref B4_COD))
                         {
-                            if (this.B(ref cod))
+                            if (this.B(ref B_COD))
                             {
-                                if (this.B3(ref cod))
+                                if (this.B3(ref B3COD))
                                 {
                                     if (_currentToken.Lexeme == "end")
                                     {
                                         this.NextToken();
-                                        return this.B(ref cod);
+                                        if (this.B(ref BRCOD))
+                                        {
+                                            BCOD += string.Format("caso {0} seja {1} faca {2} {3} fimcaso {4}", B4COD, B4_COD, B_COD, B3COD, BRCOD);
+                                            return true;
+                                        }
+                                        return false;
                                     }
                                 }
                             }
@@ -157,17 +206,17 @@ namespace MatLabCompiler.Syntatic
                 {
                     if (this.B(ref B_1Cod))
                     {
-                        cod = string.Concat(cod, id, B6Cod, B_1Cod);
+                        BCOD = string.Concat(BCOD, id, B6Cod, B_1Cod);
                     }
                 }
 
                 this.RestoreToken();
             }
             SaveToken();
-            if (this.E1(ref cod))
+            if (this.E1(ref BCOD))
             {
-                if (this.B7(ref cod))
-                    return this.B(ref cod);
+                if (this.B7(ref BCOD))
+                    return this.B(ref BCOD);
 
                 return false;
             }
@@ -175,15 +224,27 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B1(ref string cod)
+        private bool B1(ref string B1COD)
         {
+            string B5COD = string.Empty;
+            string BCOD = string.Empty;
+            string B1_COD = string.Empty;
+
             if (_currentToken.Lexeme == "elseif")
             {
                 this.NextToken();
-                if (this.B5(ref cod))
+                if (this.B5(ref B5COD))
                 {
-                    if (this.B(ref cod))
-                        return this.B1(ref cod);
+                    if (this.B(ref BCOD))
+                    {
+                        if(this.B1(ref B1_COD))
+                        {
+                            B1COD = string.Format("senao se {0} {1} {2}", B5COD, BCOD, B1_COD);
+                            return true;
+                        }
+
+                        return false;
+                    }
                 }
 
                 return false;
@@ -192,27 +253,42 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B2(ref string cod)
+        private bool B2(ref string B2COD)
         {
+            string BCOD = string.Empty;
+
             if (_currentToken.Lexeme == "else")
             {
                 this.NextToken();
-                return this.B(ref cod);
+
+                if(this.B(ref BCOD))
+                {
+                    B2COD = string.Format("senao {0}", BCOD);
+                }
             }
 
             return true;
         }
 
-        private bool B3(ref string cod)
+        private bool B3(ref string B3COD)
         {
+            string B4COD = string.Empty;
+            string B3_COD = string.Empty;
+            string BCOD = string.Empty;
+
             if (_currentToken.Lexeme == "case")
             {
                 this.NextToken();
-                if (this.B4(ref cod))
+                if (this.B4(ref B4COD))
                 {
-                    if (this.B(ref cod))
+                    if (this.B(ref BCOD))
                     {
-                        return this.B3(ref cod);
+                        if(this.B3(ref B3_COD))
+                        {
+                            B3COD = string.Format("caso {0} {1} {2}", B4COD, BCOD, B3_COD);
+                            return true;
+                        }
+                        return false;
                     }
                 }
 
@@ -221,8 +297,11 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "otherwise")
             {
                 this.NextToken();
-                if (this.B(ref cod))
+                if (this.B(ref BCOD))
+                {
+                    B3COD = string.Format("casocontrario {0}", BCOD);
                     return true;
+                }
 
                 return false;
             }
@@ -764,6 +843,20 @@ namespace MatLabCompiler.Syntatic
             _currentToken = _sentence.ElementAt(_currentIndex);
         }
 
+        private void GenerateInitialCode(ref string cod, IEnumerable<Token> tokens)
+       {
+            if (tokens.Count() == 0) return;
+
+            var identifiersCode = "Var \n";
+            var identifiers = tokens.Where(t => t.Type == eTokenType.Identifier).Distinct();
+
+            for (int i = 0; i < identifiers.Count(); i ++)
+                identifiersCode += i == 0 ? identifiers.ElementAt(i).Lexeme : string.Format(",{0}", identifiers.ElementAt(i).Lexeme);
+            
+            identifiersCode += ": Real";
+            cod += string.Format("\n{0}\n" ,identifiersCode);
+        }
+
         #endregion
 
         #region Public Methods
@@ -778,11 +871,16 @@ namespace MatLabCompiler.Syntatic
             _currentIndex = 0;
             _currentToken = tokens.First();
 
+            cod += "Algoritmo";
+
+            this.GenerateInitialCode(ref cod, tokens);
 
             if (this.P(ref cod))
                 this.SyntaticResults.Add("Success");
             else
                 this.SyntaticResults.Add("Unexpected token " + _currentToken);
+
+            cod += "\nfimalgoritmo";
         }
 
         #endregion
