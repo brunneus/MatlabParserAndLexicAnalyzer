@@ -23,7 +23,7 @@ namespace MatLabCompilerTests
 
             var stringCod = string.Empty;
             _lexicAnalyzer.Analyze(ifString);
-            _parserAnalyzer.Analyze(_lexicAnalyzer.Tokens, ref stringCod);
+            //_parserAnalyzer.Analyze(_lexicAnalyzer.Tokens, ref stringCod);
 
             Assert.IsTrue(_parserAnalyzer.SyntaticResults.First().ToString().Equals("Success"));
         }
@@ -36,7 +36,7 @@ namespace MatLabCompilerTests
             var stringCod = string.Empty;
 
             _lexicAnalyzer.Analyze(whileString);
-            _parserAnalyzer.Analyze(_lexicAnalyzer.Tokens, ref stringCod);
+            //_parserAnalyzer.Analyze(_lexicAnalyzer.Tokens, ref stringCod);
 
             Assert.IsTrue(_parserAnalyzer.SyntaticResults.First().ToString().Equals("Success"));
         }
