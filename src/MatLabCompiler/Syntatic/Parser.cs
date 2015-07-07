@@ -157,6 +157,7 @@ namespace MatLabCompiler.Syntatic
             else if (_currentToken.Lexeme == "switch")
             {
                 this.NextToken();
+                var identifier = _currentToken.Lexeme;
 
                 string B4COD = string.Empty;
                 string B3COD = string.Empty;
@@ -173,14 +174,14 @@ namespace MatLabCompiler.Syntatic
                         {
                             if (this.B(ref B_COD))
                             {
-                                if (this.B3(ref B3COD))
+                                if (this.B3(ref B3COD, identifier))
                                 {
                                     if (_currentToken.Lexeme == "end")
                                     {
                                         this.NextToken();
                                         if (this.B(ref BRCOD))
                                         {
-                                            BCOD += string.Format("caso {0} seja {1} faca {2} {3} fimcaso {4}", B4COD, B4_COD, B_COD, B3COD, BRCOD);
+                                            BCOD += string.Format("se {0} == {1} {2} {3} fimse {4}", B4COD.TrimEnd(), B4_COD, B_COD, B3COD, BRCOD);
                                             return true;
                                         }
                                         return false;
@@ -270,7 +271,7 @@ namespace MatLabCompiler.Syntatic
             return true;
         }
 
-        private bool B3(ref string B3COD)
+        private bool B3(ref string B3COD, string identifier)
         {
             string B4COD = string.Empty;
             string B3_COD = string.Empty;
@@ -283,9 +284,9 @@ namespace MatLabCompiler.Syntatic
                 {
                     if (this.B(ref BCOD))
                     {
-                        if(this.B3(ref B3_COD))
+                        if(this.B3(ref B3_COD, identifier))
                         {
-                            B3COD = string.Format("caso {0} {1} {2}", B4COD, BCOD, B3_COD);
+                            B3COD = string.Format("senão se "+ identifier +" == {0} {1} {2}", B4COD, BCOD, B3_COD);
                             return true;
                         }
                         return false;
@@ -299,7 +300,7 @@ namespace MatLabCompiler.Syntatic
                 this.NextToken();
                 if (this.B(ref BCOD))
                 {
-                    B3COD = string.Format("casocontrario {0}", BCOD);
+                    B3COD = string.Format("senao\n{0}", BCOD);
                     return true;
                 }
 
@@ -844,14 +845,15 @@ namespace MatLabCompiler.Syntatic
         }
 
         private void GenerateInitialCode(ref string cod, IEnumerable<Token> tokens)
-       {
+        {
             if (tokens.Count() == 0) return;
 
             var identifiersCode = "Var \n";
-            var identifiers = tokens.Where(t => t.Type == eTokenType.Identifier).Distinct();
+
+            var identifiers = tokens.Where(t => t.Type == eTokenType.Identifier).Select(t => t.Lexeme).Distinct();
 
             for (int i = 0; i < identifiers.Count(); i ++)
-                identifiersCode += i == 0 ? identifiers.ElementAt(i).Lexeme : string.Format(",{0}", identifiers.ElementAt(i).Lexeme);
+                identifiersCode += i == 0 ? identifiers.ElementAt(i) : string.Format(",{0}", identifiers.ElementAt(i));
             
             identifiersCode += ": Real";
             cod += string.Format("\n{0}\n" ,identifiersCode);

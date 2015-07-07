@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,14 @@ namespace MatLabCompiler
         public override string ToString()
         {
             return string.Format("[{0}, {1}]  {2}  \"{3}\"", this.Row, this.Column, this.Lexeme, this.Type.ToString());
+        }
+
+        public int CompareTo(Token other)
+        {
+            if(other.Lexeme == this.Lexeme)
+                return 0;
+
+            return -1;
         }
     }
 }
